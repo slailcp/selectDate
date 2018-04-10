@@ -31,18 +31,19 @@ export default {
     }
   },
   computed: {
-    pullDate() {
-      var dateObj = {};
-      let allDate = this.getAll(this.startDate, this.endDate);
-      allDate.forEach((item, index) => {
-        if (index > 0) {
-          item.month === allDate[index-1].month? this.dateObjPushData(item, dateObj, false): this.dateObjPushData(item, dateObj, true);
-        } else {
-          this.dateObjPushData(item, dateObj, true);
-        }
-      })
-      return dateObj;
-    }
+      pullDate() {
+        var dateObj = {};
+        let allDate = this.getAll(this.startDate, this.endDate);
+        allDate.forEach((item, index) => {
+          if (index > 0) { // 当月一号以后
+            // 前一天和后一天的月份是否相当？那么就是同一个月的：那么就是下个月的(如果超过当前的月份就是下个月一号)
+            item.month === allDate[index - 1].month ? this.dateObjPushData(item, dateObj, false) : this.dateObjPushData(item, dateObj, true);
+          } else { // 当月一号
+            this.dateObjPushData(item, dateObj, true);
+          }
+        })
+        return dateObj;
+      }
   },
   methods: {
     dayClickEvent(data) {
@@ -69,24 +70,27 @@ export default {
       };
       item.classname = className;
       item.tags = tag;
-      if (isWeek) {
-        let week = item.week;
-        if (!dateObj[key]) {
-          dateObj[key] = {};
-          for (let i = 0; i < week; i++) { // 对本月一号之前的周几补全。
-            !dateObj[key].date? dateObj[key].date=[]: dateObj[key].date.push({});
+       if (isWeek) { // 每个月的一号
+          console.log(item)
+          let week = item.week; // 周几
+          if (!dateObj[key]) { // 如果没有存储当前月的标识 (以月份为单位进行存储)
+            dateObj[key] = {}; // 就创建一个对象标识
+            for (let i = 0; i < week; i++) { // 对本月一号之前的周几补全。
+              !dateObj[key].date ? dateObj[key].date = [] : dateObj[key].date.push({}); // 如果当前月份没有存储当前天数用的数组,就创建一个空数组，如果有，就向里面添加一个空对象; (空对象是用来占位置的，用来填充月份前面的空白)
+            }
+            dateObj[key].title = yearMonth;
+            !dateObj[key].date ? dateObj[key].date = [item] : dateObj[key].date.push(item); // 如果当前月份没有存储当前天数用的数组,就创建一个空数组,并且初始化存放item,如果有数组，就向里面依次填充
           }
-          dateObj[key].title = yearMonth;
-          !dateObj[key].date? dateObj[key].date=[item]: dateObj[key].date.push(item);
-        }
-      } else {
-        if (!dateObj[key]) {
-          dateObj[key] = {};
-          !dateObj[key].date? dateObj[key].date=[]: dateObj[key].date.push(item);
         } else {
-          !dateObj[key].date? dateObj[key].date=[]: dateObj[key].date.push(item);
+//          if (!dateObj[key]) { //
+//            console.log(dateObj[key]);
+//            dateObj[key] = {};
+//            !dateObj[key].date ? dateObj[key].date = [] : dateObj[key].date.push(item);
+//          } else {
+//            !dateObj[key].date ? dateObj[key].date = [] : dateObj[key].date.push(item);
+//          }
+          dateObj[key].date.push(item)
         }
-      }
     },
     pushTag(yearMonthDay) { // 添加 价格信息，是否休息等。。。
       let tags = [];
