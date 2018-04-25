@@ -42,7 +42,7 @@
     </div>
     <transition name="dateHide">
       <div class="flight-selectdate" v-show="modalData.dateIsShow">
-        <selectdate :modal="modalData"></selectdate>
+        <selectdate :modal="modalData" @selectDate="selectDateEvent"></selectdate>
       </div>
     </transition>
   </div>
@@ -93,6 +93,12 @@ export default {
   methods: {
     selectDate() {
       this.modalData.dateIsShow = !this.modalData.dateIsShow;
+    },
+    selectDateEvent(data) {
+      console.log(data)
+      this.modalData.dateIsShow = !this.modalData.dateIsShow;
+      let date = data.month + '月' + data.day + '日'
+      this.modalData.dateText = date;
     },
     toCity(event) {
       this.modalData.isShow=true;
