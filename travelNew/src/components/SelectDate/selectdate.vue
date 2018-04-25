@@ -36,7 +36,8 @@
       return {
         startDate: this.modal.startDate,
         endDate: this.modal.endDate,
-        dateJson: this.modal.dateJson
+        dateJson: this.modal.dateJson,
+        currentDate: this.modal.currentDate
       }
     },
     computed: {
@@ -49,7 +50,7 @@
     },
     methods: {
       dayClickEvent(data) {
-        this.$emit('selectDate', data);
+        this.$emit('selectDate',data);
       },
       pushTag(yearMonthDay) { // 添加 价格信息，是否休息等。。。
         let tags = [];
@@ -62,6 +63,26 @@
           }
         }
         return tags;
+      },
+      setClass(start,end, i){ //根据日期给div设置样式
+        let className = '';
+        if (i >= moment(start).format('x') && i <= moment(end)) { // 是否在开始和结束之间
+          className = 'day';
+          if(moment(i).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')){ // 今天
+            className += ' today';
+          }
+          this.currentDate.forEach(item => { // currentDate
+            if(moment(i).format('YYYY-MM-DD') === moment(item).format('YYYY-MM-DD')){
+              className += ' curday';
+            }
+          })
+        } else {
+          className = 'pass';
+          if(moment(i).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')){
+            className += ' today';
+          }
+        }
+        return className;
       },
       getAll(start, end) { // 获取两个日期间的所有日期数据
         const sd = Number(moment(start).startOf('month').format('x')); // 本月第一天
@@ -89,14 +110,11 @@
             dataObject[i] = op;
           }
 
-          let className = '';
-          if (i >= moment(start).format('x') && i <= moment(end)) { // 是否在开始和结束之间
-            className = 'day';
-          } else {
-            className = 'pass';
-          }
+          //根据日期给div设置样式
+          let className = this.setClass(start, end, i);
 
           const tag = this.pushTag(moment(i).format('YYYY-MM-DD')); // 折扣，休息等信息
+
           const option = {
             year: moment(i).format('YYYY'),
             month: moment(i).format('MM'),
@@ -113,7 +131,6 @@
     }
   }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" rel="stylesheet/stylus">
   .select-date
