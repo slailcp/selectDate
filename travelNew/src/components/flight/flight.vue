@@ -64,6 +64,7 @@ export default {
         dateText: '6月8日',
         startDate: '2017-8-10',
         endDate: '2018-1-15',
+        currentDate:['2017-04-28','2017-05-01'], // 进去就默认选中的日期
         dateJson: [{
          date: '2017-8-11',
          price: '100'
