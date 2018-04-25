@@ -49,9 +49,7 @@
     },
     methods: {
       dayClickEvent(data) {
-        this.modal.dateIsShow = !this.modal.dateIsShow;
-        let date = data.month + '月' + data.day + '日'
-        this.modal.dateText = date;
+        this.$emit('selectDate',data);
       },
       pushTag(yearMonthDay) { // 添加 价格信息，是否休息等。。。
         let tags = [];
