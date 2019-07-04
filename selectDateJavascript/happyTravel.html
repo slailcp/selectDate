@@ -5,57 +5,48 @@
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 	<title>选择日期</title>
 	<style>
-	*{margin:0;padding:0;list-style:none}
-	.title-wraper{height: 30px;}
-	.title-wraper .title{width:55px;float: left;color:#333;text-align: center}
+		*{margin:0;padding:0;list-style:none}
+		.title-wraper{height: 30px;}
+		.title-wraper .title{width:55px;float: left;color:#333;text-align: center}
 
 
-	.select-date{background: blue; color:#fff;}
-	.date-title{width: 100%;background-color: transparent;color: #fff;line-height: 20px;font-weight: 400;text-align: center;letter-spacing: 2px;;font-size:18px;z-index: 9;padding:10px 0}
-	ul{overflow: hidden;background:blue;}
-	li{position:relative;float: left;width:53px;height:56px;border:1px solid blue;background: blue;text-align:center;line-height: 58px;font-size:18px}
-	.pass,.future{color:#ccc;opacity:0.5}
-	.day{color:#fff}
-	i{display:block;position:absolute;;color:#fff;font-style:normal;font-size:12px}
-	.date{display:none;font-style:none}
-	.rest{right:10px;top:10px;width:15px;height:15px;background:#4AC29A;line-height:15px}
-	.price{bottom:0;left:0;;width:100%;font-size:12px;line-height:20px}
-	.discount{right:10px;top:10px;width:15px;height:15px;background:#ff6600;line-height:15px}
+		.select-date{background: blue; color:#fff;}
+		.date-title{width: 100%;background-color: transparent;color: #fff;line-height: 20px;font-weight: 400;text-align: center;letter-spacing: 2px;;font-size:18px;z-index: 9;padding:10px 0}
+		ul{overflow: hidden;background:blue;}
+		li{position:relative;float: left;width:53px;height:56px;border:1px solid blue;background: blue;text-align:center;line-height: 58px;font-size:18px}
+		.pass,.future{color:#ccc;opacity:0.5}
+		.day{color:#fff}
+		i{display:block;position:absolute;;color:#fff;font-style:normal;font-size:12px}
+		.date{display:none;font-style:none}
+		.rest{right:10px;top:10px;width:15px;height:15px;background:#4AC29A;line-height:15px}
+		.price{bottom:0;left:0;;width:100%;font-size:12px;line-height:20px}
+		.discount{right:10px;top:10px;width:15px;height:15px;background:#ff6600;line-height:15px}
 	</style>
 	<script src="moment.js"></script>
 	<script>
-	window.onload=function(){
-        var c1=new Calendar();
-        var CalendarInfo = c1.init();
-        console.log(CalendarInfo); // 日期数据
-		// 拼接Html
-        var html = ''
-        for(var key in CalendarInfo){
-            var item  = CalendarInfo[key];
-            html+='<div class="date-title">'+item.title+'</div>';
-            html+='<ul class="">';
-            for(var i=0;i<item.date.length;i++){
-                var ele = item.date[i];
-                if(!ele.classname){
-                    html+='<li class="day" >--</li>';
-                }else{
-                    // var moreDate =moment( moment(ele.date).add(3,'days')).format('DD');
-                    html+='<li class="day '+ele.classname+'">'+ele.day+'</li>';
+        window.onload=function(){
+            var c1=new Calendar();
+            var CalendarInfo = c1.init();
+            console.log(CalendarInfo); // 日期数据
+            // 拼接Html
+            var html = ''
+            for(var key in CalendarInfo){
+                var item  = CalendarInfo[key];
+                html+='<div class="date-title">'+item.title+'</div>';
+                html+='<ul class="">';
+                for(var i=0;i<item.date.length;i++){
+                    var ele = item.date[i];
+                    if(!ele.classname){
+                        html+='<li class="day" >--</li>';
+                    }else{
+                        // var moreDate =moment( moment(ele.date).add(3,'days')).format('DD');
+                        html+='<li class="day '+ele.classname+'">'+ele.day+'</li>';
+                    }
                 }
-			}
-            // $.each(item.date,function(index,ele){
-            //     if(!ele.classname){
-            //         html+='<li class="day" date="2019-4-13">13</li>';
-            //     }else{
-            //         // var moreDate =moment( moment(ele.date).add(3,'days')).format('DD');
-            //         html+='<li class="day '+ele.classname+'">'+ele.day+'</li>';
-            //     }
-            // })
-            html+='</ul>';
+                html+='</ul>';
+            }
+            document.getElementById('date').innerHTML = html
         }
-        document.getElementById('date').innerHTML = html
-       // $('#date').html(html);
-	}
 	</script>
 </head>
 
@@ -69,10 +60,9 @@
 	<span class="title">五</span>
 	<span class="title">六</span>
 </div>
-	<div id="date" class="select-date">
-	</div>
+<div id="date" class="select-date">
+</div>
 <script>
-<<<<<<< HEAD
     /*返回某时间段的所有日期数据，并格式化，并根据是否今天还是明天还是后天加了classname*/
     var dateJson = [
         {
@@ -89,44 +79,6 @@
             price: '100',
             discount: '折'
         }]
-=======
-var json = {
-	startDate: '2017-8-10',
-	endDate: '2018-1-15',
-	dateJson: [{
-		date: '2017-10-11',
-		price: '100'
-	},
-	{
-		date: '2017-8-13',
-		price: '100',
-		rest: '休'
-	},
-	{
-		date: '2017-8-15',
-		price: '100',
-		discount: '折'
-	}]
-}
-function selectDate(){
-	this.wrapperDIV=null;
-	this.settings={
-		startDate: '2017-8-10',
-		endDate: '2018-1-15',
-		data:json.dateJson
-	}
-}
-selectDate.prototype.init=function(obj,opt){
-	extend(this.settings, opt);
-	this.wrapperDIV=document.getElementById(obj);
-	this.getDate();
-}
-selectDate.prototype.getDate=function() {
-	let allDate = getAll(this.settings.startDate, this.settings.endDate);
-	// allDate.splice(allDate.length-1, 1);
-	let str = '';
-	let className = '';
->>>>>>> a91f58c53532c05d8955537264b7b41aa964bd6d
 
     function Calendar() {
         this.settings = {
@@ -166,7 +118,7 @@ selectDate.prototype.getDate=function() {
                 if (moment(i).format('YYYY/MM/DD') === moment(item).format('YYYY/MM/DD')) {
                     className += ' curday';
                 }
-			}
+            }
 
         } else {
             className = 'pass';daytype='pass';
@@ -225,12 +177,12 @@ selectDate.prototype.getDate=function() {
 
 
 
-function extend(set, opt) {
-	for ( var property in opt) {
-	    set[property] = opt[property];
-	}
-	return set;
-}
+    function extend(set, opt) {
+        for ( var property in opt) {
+            set[property] = opt[property];
+        }
+        return set;
+    }
 </script>
 </body>
 </html>

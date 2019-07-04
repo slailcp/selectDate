@@ -14,10 +14,10 @@
       <file leaf-file-name="happyTravel.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/happyTravel.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+            <state relative-caret-position="1279">
+              <caret line="154" column="35" lean-forward="true" selection-start-line="154" selection-start-column="35" selection-end-line="154" selection-end-column="35" />
               <folding>
-                <element signature="e#4536#4950#0" expanded="false" />
+                <element signature="e#3448#3862#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -246,12 +246,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1562218178796</updated>
-      <workItem from="1562218180046" duration="1278000" />
+      <workItem from="1562218180046" duration="1900000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1278000" />
+    <option name="totallyTimeSpent" value="1900000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -330,10 +330,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/happyTravel.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+        <state relative-caret-position="1279">
+          <caret line="154" column="35" lean-forward="true" selection-start-line="154" selection-start-column="35" selection-end-line="154" selection-end-column="35" />
           <folding>
-            <element signature="e#4536#4950#0" expanded="false" />
+            <element signature="e#3448#3862#0" expanded="false" />
           </folding>
         </state>
       </provider>
