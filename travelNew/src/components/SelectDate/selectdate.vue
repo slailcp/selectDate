@@ -2,13 +2,14 @@
   <div>
     <div class="select-date">
       <ul>
+       <li>日</li>
         <li>一</li>
         <li>二</li>
         <li>三</li>
         <li>四</li>
         <li>五</li>
         <li>六</li>
-        <li>七</li>
+       
       </ul>
       <div v-for="item in pullDate">
         <div class="date-title">{{item.title}}</div>
@@ -91,7 +92,7 @@
         let dataObject = {};
 
         dataObject[sd] = {title: moment(start).format('YYYY年MM月'), date: []} // 初始第一个月
-        for (let w = 1; w < moment(sd).weekday(); w++) { // 对本月一号之前的周几补全。
+        for (let w = 0; w < moment(sd).weekday(); w++) { // 对本月一号之前的周几补全。
           dataObject[sd].date.push({year: '', month: '', day: '', week: w});// 如果当前月份没有存储当前天数用的数组,就创建一个空数组，如果有，就向里面添加一个空对象; (空对象是用来占位置的，用来填充月份前面的空白)
         }
 
@@ -104,7 +105,7 @@
               title: moment(i).add(1, 'days').format('YYYY年MM月'), // 下个月的第一天
               date: []
             }
-            for (let w = 1; w < moment(i).weekday(); w++) { // 对本月一号之前的周几补全。
+            for (let w = 0; w < moment(i).weekday(); w++) { // 对本月一号之前的周几补全。
               op.date.push({year: '', month: '', day: '', week: w});// 如果当前月份没有存储当前天数用的数组,就创建一个空数组，如果有，就向里面添加一个空对象; (空对象是用来占位置的，用来填充月份前面的空白)
             }
             dataObject[i] = op;
