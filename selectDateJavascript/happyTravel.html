@@ -6,10 +6,14 @@
 	<title>选择日期</title>
 	<style>
 	*{margin:0;padding:0;list-style:none}
+	.title-wraper{height: 30px;}
+	.title-wraper .title{width:55px;float: left;color:#333;text-align: center}
+
+
 	.select-date{background: blue; color:#fff;}
 	.date-title{width: 100%;background-color: transparent;color: #fff;line-height: 20px;font-weight: 400;text-align: center;letter-spacing: 2px;;font-size:18px;z-index: 9;padding:10px 0}
 	ul{overflow: hidden;background:blue;}
-	li{position:relative;float: left;width:43px;height:56px;border:1px solid blue;background: blue;text-align:center;line-height: 58px;font-size:18px}
+	li{position:relative;float: left;width:53px;height:56px;border:1px solid blue;background: blue;text-align:center;line-height: 58px;font-size:18px}
 	.pass,.future{color:#ccc;opacity:0.5}
 	.day{color:#fff}
 	i{display:block;position:absolute;;color:#fff;font-style:normal;font-size:12px}
@@ -18,167 +22,168 @@
 	.price{bottom:0;left:0;;width:100%;font-size:12px;line-height:20px}
 	.discount{right:10px;top:10px;width:15px;height:15px;background:#ff6600;line-height:15px}
 	</style>
+	<script src="moment.js"></script>
 	<script>
 	window.onload=function(){
-		var s1=new selectDate();
-		s1.init('date',{
-			startDate: '2017-6-10',
-			endDate: '2017-11-11',
-			data: [{
-				date: '2017-6-11',
-				price: '100'
-			},
-			{
-				date: '2017-7-13',
-				price: '100',
-				rest: '休'
-			},
-			{
-				date: '2017-8-15',
-				price: '100',
-				discount: '折'
-			}]
-		});
+        var c1=new Calendar();
+        var CalendarInfo = c1.init();
+        console.log(CalendarInfo); // 日期数据
+		// 拼接Html
+        var html = ''
+        for(var key in CalendarInfo){
+            var item  = CalendarInfo[key];
+            html+='<div class="date-title">'+item.title+'</div>';
+            html+='<ul class="">';
+            for(var i=0;i<item.date.length;i++){
+                var ele = item.date[i];
+                if(!ele.classname){
+                    html+='<li class="day" >--</li>';
+                }else{
+                    // var moreDate =moment( moment(ele.date).add(3,'days')).format('DD');
+                    html+='<li class="day '+ele.classname+'">'+ele.day+'</li>';
+                }
+			}
+            // $.each(item.date,function(index,ele){
+            //     if(!ele.classname){
+            //         html+='<li class="day" date="2019-4-13">13</li>';
+            //     }else{
+            //         // var moreDate =moment( moment(ele.date).add(3,'days')).format('DD');
+            //         html+='<li class="day '+ele.classname+'">'+ele.day+'</li>';
+            //     }
+            // })
+            html+='</ul>';
+        }
+        document.getElementById('date').innerHTML = html
+       // $('#date').html(html);
 	}
 	</script>
 </head>
 
 <body>
+<div class="title-wraper">
+	<span class="title">日</span>
+	<span class="title">一</span>
+	<span class="title">二</span>
+	<span class="title">三</span>
+	<span class="title">四</span>
+	<span class="title">五</span>
+	<span class="title">六</span>
+</div>
 	<div id="date" class="select-date">
 	</div>
 <script>
-var json = {
-	startDate: '2017-8-10',
-	endDate: '2018-1-15',
-	dateJson: [{
-		date: '2017-10-11',
-		price: '100'
-	},
-	{
-		date: '2017-8-13',
-		price: '100',
-		rest: '休'
-	},
-	{
-		date: '2017-8-15',
-		price: '100',
-		discount: '折'
-	}]
-}
-function selectDate(){
-	this.wrapperDIV=null;
-	this.settings={
-		startDate: '2017-8-10',
-		endDate: '2018-1-15',
-		data:json.dateJson
-	}
-}
-selectDate.prototype.init=function(obj,opt){
-	extend(this.settings, opt);
-	this.wrapperDIV=document.getElementById(obj);
-	this.getDate();
-}
-selectDate.prototype.getDate=function() {
-	let allDate = getAll(this.settings.startDate, this.settings.endDate);
-	allDate.splice(allDate.length-1, 1);
-	let str = '';
-	let className = '';
+    /*返回某时间段的所有日期数据，并格式化，并根据是否今天还是明天还是后天加了classname*/
+    var dateJson = [
+        {
+            date: '2017-10-11',
+            price: '100'
+        },
+        {
+            date: '2017-8-13',
+            price: '100',
+            rest: '休'
+        },
+        {
+            date: '2017-8-15',
+            price: '100',
+            discount: '折'
+        }]
 
-	allDate.forEach((item, index) => {
-		let yearMonth = item.year + '-' + item.month;
-		let yearMonthDay = item.year + '-' + item.month + '-' + item.day;
+    function Calendar() {
+        this.settings = {
+            startDate: '2019-05-10', // 开始时间
+            endDate: '2019-10-15',// 结束时间
+            dateJson: dateJson, // 日期上的标识数据，class名字要和这个标识字段一摸一样，例如json里面的“折”是discount,那么css名字也叫.discount
+            defaultSelectDate: ['2019-07-02', '2019-07-09'] // 选中的日期
+        }
+    }
 
-		switch (compareDate(this.settings.startDate, this.settings.endDate, yearMonthDay)) {
-			case 'day':
-				className = 'day';
-				break;
-			case 'future':
-				className = 'future';
-				break;
-			case 'pass':
-				className = 'pass';
-				break;
-		};
+    Calendar.prototype.init = function (opt) {
+        extend(this.settings, opt);
+        return (this.getAllDate(this.settings.startDate, this.settings.endDate));
+    }
 
-		let tag = this.pushTag(yearMonthDay);
-		let dateLi1 = '<div class="date-title">'+item.year+'年'+item.month+'月</div><ul date='+yearMonth+'>'+ getNbsp(item.week) +'<li class='+className+' date='+yearMonthDay+'>' + item.day + tag+'</li>';
-		let dateLi2 = '<li class='+className+' date='+yearMonthDay+'>'+ item.day + tag+ '</li>';
-		let dateLi3 = '</ul><div class="date-title">'+item.year+'年'+item.month+'月</div><ul date='+yearMonth+'>'+ getNbsp(item.week) +'<li class='+className+' date='+yearMonthDay+'>' + item.day + tag+ '</li>';
-
-		if (index > 0) {
-			item.month === allDate[index-1].month? str += dateLi2: str += dateLi3;
-		} else {
-			str += dateLi1;
-		}
-	});
-
-	str += '</ul>';
-	//console.log(str)
-	this.wrapperDIV.innerHTML=str;
-	return str;
-}
-selectDate.prototype.pushTag=function(yearMonthDay) {
-	let tag='';
-	for (let i = 0; i < this.settings.data.length; i++) {
-		if (yearMonthDay === this.settings.data[i].date) {
-			for (let key in this.settings.data[i]) {
-				key === 'price' ? tag += '<i class='+key+'>￥'+this.settings.data[i][key]+'</i>' :tag += '<i class='+key+'>'+this.settings.data[i][key]+'</i>';
+    Calendar.prototype.pushTag = function (yearMonthDay) {
+        var tags = {};
+        for (var i = 0; i < this.settings.dateJson.length; i++) {
+            if (moment(yearMonthDay).format('x') === moment(this.settings.dateJson[i].date).format('x')) {
+                for (var key in this.settings.dateJson[i]) {
+                    tags[key] = this.settings.dateJson[i][key];
+                }
+                break;
+            }
+        }
+        return tags;
+    }
+    Calendar.prototype.setClass = function (start, end, i) { //根据日期给div设置样式
+        var className = '',daytype='';
+        if (i >= moment(start).format('x') && i <= moment(end)) { // 是否在开始和结束之间
+            className = 'day';daytype='day';
+            if (moment(i).format('YYYY/MM/DD') === moment().format('YYYY/MM/DD')) { // 今天
+                className += ' today';
+            }
+            for(var i=0;i<this.settings.defaultSelectDate.length;i++){
+                var item = this.settings.defaultSelectDate[i];
+                if (moment(i).format('YYYY/MM/DD') === moment(item).format('YYYY/MM/DD')) {
+                    className += ' curday';
+                }
 			}
-			break;
-		}
-	}
-	return tag;
-}
 
+        } else {
+            className = 'pass';daytype='pass';
+            if (moment(i).format('YYYY/MM/DD') === moment().format('YYYY/MM/DD')) {
+                className += ' today';
+            }
+        }
+        return {className:className,daytype:daytype};
+    }
 
-function compareDate(date1, date2, now) {
-	let d1 = new Date(date1);
-	let d2 = new Date(date2);
-	let n = new Date(now);
-	if (date1 !== '' && now !== '' && d1 > n) {
-		return 'pass';
-	}
-	if (date2 !== ''&& now !== '' && n > d2) {
-		return 'future';
-	}
-	return 'day';
-}
-function getNbsp(week) { // 根据每个月1号是周几来补全前面的空格
-	let str = '';
-	for (let i = 0; i < week; i++) {
-			str += '<li>&nbsp</li>';
-	}
-	return str;
-}
-function getFirstAndLastMonthDay(year, month) { // 获取当前月的最后一天
-	 let day = new Date(year, month, 0);
-	 let lastdate = year + '-' + month + '-' + day.getDate(); // 获取当月最后一天日期
-	 return lastdate;
-}
-function DateFormat(obj) {
-			let mouth = (obj.getMonth() + 1)>=10?(obj.getMonth() + 1):((obj.getMonth() + 1));
-			let day = obj.getDate()>=10?obj.getDate():(obj.getDate());
-			let week = new Date(obj.getFullYear() + '/' + mouth + '/' + day).getDay()
-			return ({year: obj.getFullYear(), month: mouth, day: day, week: week}); // 返回日期。
-}
-function getAll(begin, end) { // 获取两个日期间的所有日期
-	let myBegin = begin.split('-')[0] + '-' + begin.split('-')[1] + '-' + 1;
-	let myEnd = getFirstAndLastMonthDay(end.split('-')[0], end.split('-')[1]);
-	let dateArr = [];
-	let ab = myBegin.split('-');
-	let ae = myEnd.split('-');
-	let db = new Date();
-	db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);
-	let de = new Date();
-	de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);
-	let unixDb = db.getTime();
-	let unixDe = de.getTime();
-	for (let k = unixDb; k <= unixDe;) {
-			dateArr.push(DateFormat(new Date(parseInt(k))));
-			k = k + 24 * 60 * 60 * 1000;
-	}
-	return dateArr;
-}
+    Calendar.prototype.getAllDate = function (start, end) { // 获取两个日期间的所有日期数据
+        var sd = Number(moment(start).startOf('month').format('x')); // 本月第一天
+        var ed = Number(moment(end).endOf('month').format('x')); // 本月最后一天
+
+        var dataObject = {};
+
+        dataObject[sd] = {title: moment(start).format('YYYY年MM月'), date: []} // 初始第一个月
+        // console.log( moment(sd).weekday())
+        for (var w = 0; w < moment(sd).weekday(); w++) { // 对本月一号之前的周几补全。
+            dataObject[sd].date.push({year: '', month: '', day: '', week: w});// 如果当前月份没有存储当前天数用的数组,就创建一个空数组，如果有，就向里面添加一个空对象; (空对象是用来占位置的，用来填充月份前面的空白)
+        }
+        for (var i = sd; i <= ed;) {
+            var firstDay = Number(moment(i).startOf('month').format('x')); // 当月第一天;--作为每个月的唯一标示
+
+            if (moment(i).format('x') === moment(moment(i).startOf('month').format('YYYY-MM-DD')).format('x') && i !== sd) { // 如果是当月的第一天,添加下个月的数据
+                //   console.log(i, sd)
+                var op = {
+                    title: moment(i).add(1, 'days').format('YYYY年MM月'), // 下个月的第一天
+                    date: []
+                }
+                for (var w = 0; w < moment(i).weekday(); w++) { // 对本月一号之前的周几补全。
+                    op.date.push({year: '', month: '', day: '', week: w});// 如果当前月份没有存储当前天数用的数组,就创建一个空数组，如果有，就向里面添加一个空对象; (空对象是用来占位置的，用来填充月份前面的空白)
+                }
+                dataObject[i] = op;
+            }
+
+            //根据日期给div设置样式
+            var className = this.setClass(start, end, i).className;
+            var daytype = this.setClass(start, end, i).daytype;
+            var tag = this.pushTag(moment(i).format('YYYY/MM/DD')); // 折扣，休息等信息
+            var option = {
+                year: moment(i).format('YYYY'),
+                month: moment(i).format('MM'),
+                day: moment(i).format('DD'),
+                week: moment(i).weekday(),
+                classname: className,
+                daytype: daytype,
+                tags: tag,
+                date: moment(i).format('YYYY/MM/DD')
+            }
+            dataObject[firstDay].date.push(option);
+            i = Number(moment(i).add(1, 'days').format('x')); // 下次赋值
+        }
+        return dataObject;
+    }
+
 
 
 function extend(set, opt) {
