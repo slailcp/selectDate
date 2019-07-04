@@ -72,6 +72,7 @@
 	<div id="date" class="select-date">
 	</div>
 <script>
+<<<<<<< HEAD
     /*返回某时间段的所有日期数据，并格式化，并根据是否今天还是明天还是后天加了classname*/
     var dateJson = [
         {
@@ -88,6 +89,44 @@
             price: '100',
             discount: '折'
         }]
+=======
+var json = {
+	startDate: '2017-8-10',
+	endDate: '2018-1-15',
+	dateJson: [{
+		date: '2017-10-11',
+		price: '100'
+	},
+	{
+		date: '2017-8-13',
+		price: '100',
+		rest: '休'
+	},
+	{
+		date: '2017-8-15',
+		price: '100',
+		discount: '折'
+	}]
+}
+function selectDate(){
+	this.wrapperDIV=null;
+	this.settings={
+		startDate: '2017-8-10',
+		endDate: '2018-1-15',
+		data:json.dateJson
+	}
+}
+selectDate.prototype.init=function(obj,opt){
+	extend(this.settings, opt);
+	this.wrapperDIV=document.getElementById(obj);
+	this.getDate();
+}
+selectDate.prototype.getDate=function() {
+	let allDate = getAll(this.settings.startDate, this.settings.endDate);
+	// allDate.splice(allDate.length-1, 1);
+	let str = '';
+	let className = '';
+>>>>>>> a91f58c53532c05d8955537264b7b41aa964bd6d
 
     function Calendar() {
         this.settings = {
