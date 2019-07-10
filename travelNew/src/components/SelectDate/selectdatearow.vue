@@ -34,57 +34,52 @@
   import moment from 'moment'
 
   export default {
-    props: {
-      modal: {
-        type: Object
-      }
-    },
+    props: ['startDate', 'endDate', 'dateJson', 'currentDate'],
     data() {
       return {
-        startDate: this.modal.startDate, // 初始时间
-        endDate: moment(this.modal.startDate).endOf('month').format('YYYY-MM-DD'),//this.modal.endDate, // 截止时间
-        dateJson: this.modal.dateJson,
-        currentDate: this.modal.currentDate,
+       clickStartDate: this.startDate, // 初始时间
+        clickEndDate: moment(this.startDate).endOf('month').format('YYYY-MM-DD'),//this.endDate, // 截止时间
+        // dateJson: this.dateJson,
+        // currentDate: this.currentDate,
         pullDate: null
       }
     },
     computed: {
       // pullDate() {
-      //   const all = this.getAll(this.startDate, this.endDate);
+      //   const all = this.getAll(this.clickStartDate, this.clickEndDate);
       //   return all;
       // }
     },
     created() {
-      this.pullDate = this.getAll(this.startDate, this.endDate);
+      this.pullDate = this.getAll(this.clickStartDate, this.clickEndDate);
     },
     methods: {
       init() {
-        this.pullDate = this.getAll(this.startDate, this.endDate);
+        this.pullDate = this.getAll(this.clickStartDate, this.clickEndDate);
       },
       leftArow() {
-        this.startDate = (moment(this.startDate).add(-1, 'month')).startOf('month').format('YYYY-MM-DD');
-        this.endDate = moment(this.startDate).endOf('month').format('YYYY-MM-DD');
-        const a = moment(this.startDate); // 切换的第一天
-        const b = moment(this.modal.startDate); // 设置的开始时间
+        this.clickStartDate = (moment(this.clickStartDate).add(-1, 'month')).startOf('month').format('YYYY-MM-DD');
+        this.clickEndDate = moment(this.clickStartDate).endOf('month').format('YYYY-MM-DD');
+        const a = moment(this.clickStartDate); // 切换的第一天
+        const b = moment(this.startDate); // 设置的开始时间
 
         if (moment(b).diff(a) >= 0) {
-          this.startDate = this.modal.startDate;
-          this.endDate = moment(this.startDate).endOf('month').format('YYYY-MM-DD');
+          this.clickStartDate = this.startDate;
+          this.clickEndDate = moment(this.clickStartDate).endOf('month').format('YYYY-MM-DD');
         }
 
-        this.pullDate = this.getAll(this.startDate, this.endDate);
+        this.pullDate = this.getAll(this.clickStartDate, this.clickEndDate);
       },
       rightArow() {
-        this.startDate = (moment(this.startDate).add(1, 'month')).startOf('month').format('YYYY-MM-DD');
-        this.endDate = moment(this.startDate).endOf('month').format('YYYY-MM-DD');// 最后一天;
-        const a = moment(this.endDate); // 切换的最后一天
-        const b = moment(this.modal.endDate); // 设置的截止时间
+        this.clickStartDate = (moment(this.clickStartDate).add(1, 'month')).startOf('month').format('YYYY-MM-DD');
+        this.clickEndDate = moment(this.clickStartDate).endOf('month').format('YYYY-MM-DD');// 最后一天;
+        const a = moment(this.clickEndDate); // 切换的最后一天
+        const b = moment(this.endDate); // 设置的截止时间
         if (moment(a).diff(b) >= 0) {
-          this.endDate = this.modal.endDate
-          this.startDate = moment(this.endDate).startOf('month').format('YYYY-MM-DD')
+          this.clickEndDate = this.endDate
+          this.clickStartDate = moment(this.clickEndDate).startOf('month').format('YYYY-MM-DD')
         }
-        this.pullDate = this.getAll(this.startDate, this.endDate);
-
+        this.pullDate = this.getAll(this.clickStartDate, this.clickEndDate);
       },
       dayClickEvent(data) {
         this.$emit('selectDate', data);
@@ -123,8 +118,6 @@
         return className;
       },
       getAll(start, end) { // 获取两个日期间的所有日期
-        console.log(start)
-        console.log(end)
         const sd = Number(moment(start).startOf('month').format('x')); // 本月第一天
         const ed = Number(moment(end).endOf('month').format('x')); // 本月最后一天
 
@@ -139,7 +132,6 @@
           const firstDay = Number(moment(i).startOf('month').format('x')); // 当月第一天;--作为每个月的唯一标示
 
           if (moment(i).format('x') === moment(moment(i).startOf('month').format('YYYY-MM-DD')).format('x') && i !== sd) { // 如果是当月的第一天,添加下个月的数据
-            console.log(i, sd)
             const op = {
               title: moment(i).add(1, 'days').format('YYYY年MM月'), // 下个月的第一天
               date: []
@@ -187,6 +179,8 @@
       text-align: center
       line-height: 58px
       font-size: 18px
+      &.curday
+      background #ff6e00
       &.pass, &.future
         color: #333
         opacity: 0.5

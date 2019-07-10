@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="select-date">
+
       <ul>
         <li>日</li>
         <li>一</li>
@@ -32,19 +33,15 @@
   import moment from 'moment';
 
   export default {
-    props: ['modal'],
+    props: ['startDate', 'endDate', 'dateJson', 'currentDate'],
     data() {
       return {
-        startDate: this.modal.startDate,
-        endDate: this.modal.endDate,
-        dateJson: this.modal.dateJson,
-        currentDate: this.modal.currentDate
+
       }
     },
     computed: {
       pullDate() {
         const all = this.getAll(this.startDate, this.endDate);
-        console.log(all)
         return all;
       }
     },
@@ -88,8 +85,6 @@
         return className;
       },
       getAll(start, end) { // 获取两个日期间的所有日期数据
-        console.log(start)
-        console.log(end)
         const sd = Number(moment(start).startOf('month').format('x')); // 本月第一天
         const ed = Number(moment(end).endOf('month').format('x')); // 本月最后一天
 
@@ -104,7 +99,6 @@
           const firstDay = Number(moment(i).startOf('month').format('x')); // 当月第一天;--作为每个月的唯一标示
 
           if (moment(i).format('x') === moment(moment(i).startOf('month').format('YYYY-MM-DD')).format('x') && i !== sd) { // 如果是当月的第一天,添加下个月的数据
-            console.log(i, sd)
             const op = {
               title: moment(i).add(1, 'days').format('YYYY年MM月'), // 下个月的第一天
               date: []
@@ -165,6 +159,8 @@
         text-align: center
         line-height: 58px
         font-size: 18px
+        &.curday
+          background #ff6e00
         &.pass, &.future
           color: #ccc
           opacity: 0.5

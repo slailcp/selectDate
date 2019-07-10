@@ -51,18 +51,29 @@
     </div>
     <transition name="dateHide">
       <div class="flight-selectdate" v-show="dateIsShow">
-        <selectdate :modal="selectModal" @selectDate="selectDateEvent"></selectdate>
+        <selectdate
+          :startDate="selectModal.startDate"
+          :endDate="selectModal.endDate"
+          :currentDate="selectModal.currentDate"
+          :dateJson="selectModal.dateJson"
+          @selectDate="selectDateEvent"></selectdate>
       </div>
     </transition>
     <transition name="dateHide">
       <div class="flight-selectdate" v-show="datearrowIsShow">
-        <selectdatearow :modal="selectModal" @selectDate="selectArrowDateEvent" ref="selectdate"></selectdatearow>
+        <selectdatearow
+          :startDate="arrowSelectModal.startDate"
+          :endDate="arrowSelectModal.endDate"
+          :currentDate="arrowSelectModal.currentDate"
+          :dateJson="arrowSelectModal.dateJson"
+          @selectDate="selectArrowDateEvent" ref="selectdate"></selectdatearow>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
+  /*选中的时间做调整*/
   import selectdate from '@/components/SelectDate/selectdate' // 所有日期全部展示出来
   import selectdatearow from '@/components/SelectDate/selectdatearow' // 点击一次展示一个月
   export default {
@@ -71,11 +82,12 @@
         selectModal: {
           startDate: '2019-7-01',
           endDate: '2019-11-30',
-          currentDate: ['2017-04-28', '2017-05-01'], // 进去就默认选中的日期
-          dateJson: [{
+          currentDate: ['2019-07-20'], // 进去就默认选中的日期
+          dateJson: [
+            {
             date: '2019-8-11',
             price: '100'
-          },
+           },
             {
               date: '2019-8-13',
               price: '100',
@@ -92,6 +104,32 @@
               rest: '假'
             }]
         },
+        arrowSelectModal: {
+          startDate: '2019-7-01',
+          endDate: '2019-11-30',
+          currentDate: ['2019-07-20'], // 进去就默认选中的日期
+          dateJson: [
+            {
+              date: '2019-8-11',
+              price: '100'
+            },
+            {
+              date: '2019-8-13',
+              price: '100',
+              rest: '休'
+            },
+            {
+              date: '2019-8-15',
+              price: '100',
+              discount: '折'
+            },
+            {
+              date: '2019-8-16',
+              price: '100',
+              rest: '假'
+            }]
+        },
+
         index: 0,
         isShow: false,
         citytoName: '北京',
@@ -118,12 +156,15 @@
         this.dateIsShow = false;
         let date = data.month + '月' + data.day + '日'
         this.dateText = date;
+        const _d = `${data.year}-${data.month}-${data.day}`;
+        this.selectModal.currentDate = [_d]
       },
       selectArrowDateEvent(data) {
         console.log(data)
         this.datearrowIsShow = false;
         let date = data.month + '月' + data.day + '日'
         this.dateArrowText = date;
+        this.arrowSelectModal.currentDate = [`${data.year}-${data.month}-${data.day}`]
       },
       toCity(event) {
         this.isShow = true;
